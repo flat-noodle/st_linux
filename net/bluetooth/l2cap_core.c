@@ -4749,26 +4749,6 @@ unlock:
 	return err;
 }
 
-/*static void l2cap_put_ident(struct l2cap_conn *conn, u8 code, u8 id)
-{
-	switch (code) {
-	case L2CAP_COMMAND_REJ:
-	case L2CAP_CONN_RSP:
-	case L2CAP_CONF_RSP:
-	case L2CAP_DISCONN_RSP:
-	case L2CAP_ECHO_RSP:
-	case L2CAP_INFO_RSP:
-	case L2CAP_CONN_PARAM_UPDATE_RSP:
-	case L2CAP_ECRED_CONN_RSP:
-	case L2CAP_ECRED_RECONF_RSP:
-		/* First do a lookup since the remote may send bogus ids that
-		 * would make ida_free to generate warnings.
-		 */
-		if (ida_find_first_range(&conn->tx_ida, id, id) >= 0)
-			ida_free(&conn->tx_ida, id);
-	}
-}*/
-
 static inline int l2cap_bredr_sig_cmd(struct l2cap_conn *conn,
 				      struct l2cap_cmd_hdr *cmd, u16 cmd_len,
 				      u8 *data)
