@@ -4749,7 +4749,7 @@ unlock:
 	return err;
 }
 
-static void l2cap_put_ident(struct l2cap_conn *conn, u8 code, u8 id)
+/*static void l2cap_put_ident(struct l2cap_conn *conn, u8 code, u8 id)
 {
 	switch (code) {
 	case L2CAP_COMMAND_REJ:
@@ -4767,7 +4767,7 @@ static void l2cap_put_ident(struct l2cap_conn *conn, u8 code, u8 id)
 		if (ida_find_first_range(&conn->tx_ida, id, id) >= 0)
 			ida_free(&conn->tx_ida, id);
 	}
-}
+}*/
 
 static inline int l2cap_bredr_sig_cmd(struct l2cap_conn *conn,
 				      struct l2cap_cmd_hdr *cmd, u16 cmd_len,
@@ -4775,7 +4775,7 @@ static inline int l2cap_bredr_sig_cmd(struct l2cap_conn *conn,
 {
 	int err = 0;
 
-	l2cap_put_ident(conn, cmd->code, cmd->ident);	
+	//l2cap_put_ident(conn, cmd->code, cmd->ident);	
 
 	switch (cmd->code) {
 	case L2CAP_COMMAND_REJ:
@@ -5421,7 +5421,7 @@ static inline int l2cap_le_sig_cmd(struct l2cap_conn *conn,
 {
 	int err = 0;
 
-	l2cap_put_ident(conn, cmd->code, cmd->ident);
+	//l2cap_put_ident(conn, cmd->code, cmd->ident);
 
 	switch (cmd->code) {
 	case L2CAP_COMMAND_REJ:
@@ -6907,7 +6907,7 @@ static struct l2cap_conn *l2cap_conn_add(struct hci_conn *hcon)
 	     hci_dev_test_flag(hcon->hdev, HCI_FORCE_BREDR_SMP)))
 		conn->local_fixed_chan |= L2CAP_FC_SMP_BREDR;
 
-	mutex_init(&conn->ident_lock);
+	//mutex_init(&conn->ident_lock);
 	mutex_init(&conn->chan_lock);
 
 	INIT_LIST_HEAD(&conn->chan_l);
