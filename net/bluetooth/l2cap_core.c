@@ -5037,6 +5037,8 @@ static inline int l2cap_ecred_conn_req(struct l2cap_conn *conn,
 
 	if (mtu < L2CAP_ECRED_MIN_MTU || mps < L2CAP_ECRED_MIN_MPS) {
 		result = L2CAP_CR_LE_INVALID_PARAMS;
+		/* Calculate len so the response includes a 0x0000 CID for each requested SCID */
+		len = num_scid * sizeof(__le16);		
 		goto response;
 	}
 
