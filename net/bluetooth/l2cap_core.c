@@ -5012,12 +5012,15 @@ static inline int l2cap_ecred_conn_req(struct l2cap_conn *conn,
 	struct l2cap_chan *chan, *pchan;
 	u16 mtu, mps;
 	__le16 psm;
+	u8 result, rsp_len = 0;	
 	u8 result, len = 0;
 	int i, num_scid;
 	bool defer = false;
 
 	if (!enable_ecred)
 		return -EINVAL;
+
+	memset(pdu, 0, sizeof(*pdu));	
 
 	if (cmd_len < sizeof(*req) || (cmd_len - sizeof(*req)) % sizeof(u16)) {
 		result = L2CAP_CR_LE_INVALID_PARAMS;
@@ -5026,6 +5029,9 @@ static inline int l2cap_ecred_conn_req(struct l2cap_conn *conn,
 
 	cmd_len -= sizeof(*req);
 	num_scid = cmd_len / sizeof(u16);
+
+	/* Always respond with the same number of scids as in the request */
+	rsp_len = cmd_len;	
 
 	if (num_scid > ARRAY_SIZE(pdu.dcid)) {
 		result = L2CAP_CR_LE_INVALID_PARAMS;
@@ -5036,9 +5042,7 @@ static inline int l2cap_ecred_conn_req(struct l2cap_conn *conn,
 	mps  = __le16_to_cpu(req->mps);
 
 	if (mtu < L2CAP_ECRED_MIN_MTU || mps < L2CAP_ECRED_MIN_MPS) {
-		result = L2CAP_CR_LE_INVALID_PARAMS;
-		/* Calculate len so the response includes a 0x0000 CID for each requested SCID */
-		len = num_scid * sizeof(__le16);		
+		result = L2CAP_CR_LE_INVALID_PARAMS;	
 		goto response;
 	}
 
